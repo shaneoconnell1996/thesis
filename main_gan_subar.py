@@ -123,14 +123,16 @@ class GAN_perform(object):
         self.adversarial = self.GAN.adversarial_model()
         self.generator = self.GAN.generator()
 
-    def train(self, train_steps=20000, batch_size=100):
+    def train(self, train_steps=20000, batch_size=10):
         noise_input = None
 #        if save_interval>0:
  #           noise_input = np.random.uniform(1.0, 15.0, size=[166, 200])
         for i in range(train_steps):
             real_train = self.x_train.values[np.random.randint(0,self.x_train.shape[0], size=batch_size)]
             noise = np.random.uniform(1.0, 15.0, size=[batch_size, 100])
+            #noise = tf.convert_to_tensor(noise,dtype=tf.float32)
             fake_train = self.generator.predict(noise)
+            #tf.Session().run(fake_train)
             x = np.concatenate((real_train, fake_train))
             y = np.ones([2*batch_size, 1])
             y[batch_size:, :] = 0
