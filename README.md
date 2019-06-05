@@ -4,3 +4,6 @@ As of version 3, the code appears to be running and moving along a gradient towa
 
 
 #### edit - this actually worked and performed quite well... but the gradient eventually disappeared unfortunately. So as of now, running for approximately 1500 epochs yielded positive results, whereby the discriminator was unable to tell the difference between the real and the fake data.... very promising! Must make a graph of the performance??? 
+
+
+#### edit for version 5 --- subsequent attempts to stabilise the performance of the gan have not been successful.... discriminator converges on 50 percent accuracy very quickly.... maybe need to add some extra variation in there... ie, different sources of variation, or perhaps a more complete dataset???? could include more genes as this is currently running comfortably in about 90 mins
