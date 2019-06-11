@@ -89,7 +89,7 @@ for i in range(train_steps):
      #   name="%d_iter.png" % i
         if i % save_interval == 0:
             noise = np.random.uniform(0,real_train.max(),size=[166,100])
-            name="%d_iter.png" % i
+           # name="%d_iter.png" % i
             f=G.predict(noise)
             test=scaler.inverse_transform(f)
             # t-SNE 
@@ -109,7 +109,7 @@ for i in range(train_steps):
             sne_stuff['tsne-2d-one'] = tsne_results[:,0]
             sne_stuff['tsne-2d-two'] = tsne_results[:,1]
             plt.figure(i)
-            plt.savefig(name)
+#            plt.savefig(name)
             sns.scatterplot(
                 x="tsne-2d-one", y="tsne-2d-two",
                 hue="y",
@@ -118,34 +118,36 @@ for i in range(train_steps):
                 legend="full",
                 alpha=1
             )
+            plt.savefig(name)
+
             # pca
-            newname="%d_iter_PCA.png" % i
-            pca_stuff=np.concatenate((x,test))
-            pca_stuff=pd.DataFrame(pca_stuff)
-            pca = PCA(n_components=3)
-            pca_result = pca.fit_transform(pca_stuff.values)
+            #newname="%d_iter_PCA.png" % i
+            #pca_stuff=np.concatenate((x,test))
+            #pca_stuff=pd.DataFrame(pca_stuff)
+            #pca = PCA(n_components=3)
+            #pca_result = pca.fit_transform(pca_stuff.values)
 
 
-            pca_stuff['pca-one'] = pca_result[:,0]
-            pca_stuff['pca-two'] = pca_result[:,1] 
-            pca_stuff['pca-three'] = pca_result[:,2]
+            #pca_stuff['pca-one'] = pca_result[:,0]
+            #pca_stuff['pca-two'] = pca_result[:,1] 
+            #pca_stuff['pca-three'] = pca_result[:,2]
             
             
             
-            pca_stuff['y']=y
-            pca_stuff['label'] = pca_stuff['y'].apply(lambda k: str(k))
-            plt.figure(i)
+            #pca_stuff['y']=y
+            #pca_stuff['label'] = pca_stuff['y'].apply(lambda k: str(k))
+            #plt.figure(i)
 
-            plt.savefig(newname)
+    #        plt.savefig(newname)
             #            plt.figure(i)
-            sns.scatterplot(
-                x="pca-one", y="pca-two",
-                hue="y",
-                palette=sns.color_palette("hls", 2),
-                data=pca_stuff,
-                legend="full",
-                alpha=1
-            )
+     #       sns.scatterplot(
+      #          x="pca-one", y="pca-two",
+       #         hue="y",
+        #        palette=sns.color_palette("hls", 2),
+         #       data=pca_stuff,
+          #      legend="full",
+           #     alpha=1
+           # )
         
         os.system('mv *.png images')
             
