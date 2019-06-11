@@ -7,3 +7,8 @@ As of version 3, the code appears to be running and moving along a gradient towa
 
 
 #### edit for version 5 --- subsequent attempts to stabilise the performance of the gan have not been successful.... discriminator converges on 50 percent accuracy very quickly.... maybe need to add some extra variation in there... ie, different sources of variation, or perhaps a more complete dataset???? could include more genes as this is currently running comfortably in about 90 mins
+
+
+
+
+#### edit for version 6 --- The GAN is trainign correctly but appears to be suffering from mode collapse... the initial PCA plots seem to suggest that the data generated from the noise does not cover the full extent of variation present in the real dataset .... need to try and tweak the model to fix this... 
