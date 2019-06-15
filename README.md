@@ -12,3 +12,8 @@ As of version 3, the code appears to be running and moving along a gradient towa
 
 
 #### edit for version 6 --- The GAN is trainign correctly but appears to be suffering from mode collapse... the initial PCA plots seem to suggest that the data generated from the noise does not cover the full extent of variation present in the real dataset .... need to try and tweak the model to fix this... 
+
+
+
+#### edit for version 7 as of 15th of June... 
+The mode collapse could potentoally be resolved by adding a different penalty term - the WGAN-GP, wherein a 1-Lipschitz constraint is imposed upon the gradient descent. This can ensure stable training, but trying to implement this in the current workflow is proving challenging. IN addition, need to look at some datasets where it is known there is some variation - great to talk about in the thesis. 
