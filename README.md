@@ -17,3 +17,8 @@ As of version 3, the code appears to be running and moving along a gradient towa
 
 #### edit for version 7 as of 15th of June... 
 The mode collapse could potentoally be resolved by adding a different penalty term - the WGAN-GP, wherein a 1-Lipschitz constraint is imposed upon the gradient descent. This can ensure stable training, but trying to implement this in the current workflow is proving challenging. IN addition, need to look at some datasets where it is known there is some variation - great to talk about in the thesis. 
+
+
+## edit for version 8 - 23rd of June...
+
+Now appears to be working without the wasserstein loss function ... but in much less epochs. However, both networks are quite beefy, and have 2 hefty hidden layers each. The next step now after the evaluation with concordance correlation (which performed quite well) is to extract the nodes at the top layer of the generator and see what is going on... can they be interpreted in a meaningful fashion? Very interesting... the idea is to go back to original analysis and see if any of the gene sets identified to be significant to kidney transplant are thrown up in the weights of the network after some ranking method ... this will be true proof of principle... there is also the matter of the tsne plot not looking exactly correct just yet --- shouldnt be pulled apart the way it has been. Maybe try PCA? or am I going to trust the concordance correlation metrics? After this the downstream application will involve something like the predictor built on unsupervised cluster assignment. 
