@@ -22,3 +22,9 @@ The mode collapse could potentoally be resolved by adding a different penalty te
 ## edit for version 8 - 23rd of June...
 
 Now appears to be working without the wasserstein loss function ... but in much less epochs. However, both networks are quite beefy, and have 2 hefty hidden layers each. The next step now after the evaluation with concordance correlation (which performed quite well) is to extract the nodes at the top layer of the generator and see what is going on... can they be interpreted in a meaningful fashion? Very interesting... the idea is to go back to original analysis and see if any of the gene sets identified to be significant to kidney transplant are thrown up in the weights of the network after some ranking method ... this will be true proof of principle... there is also the matter of the tsne plot not looking exactly correct just yet --- shouldnt be pulled apart the way it has been. Maybe try PCA? or am I going to trust the concordance correlation metrics? After this the downstream application will involve something like the predictor built on unsupervised cluster assignment. 
+
+
+
+
+## edit for version 9 -
+Tried adding a leaky relu eactivation function at the top layer instead of the linear one that had been used before .... seems to achieve the same results - the error term never quite reaches the minimum needed to actually imitate the data like in the sparse network. 
