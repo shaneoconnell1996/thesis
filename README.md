@@ -27,4 +27,12 @@ Now appears to be working without the wasserstein loss function ... but in much 
 
 
 ## edit for version 9 -
-Tried adding a leaky relu eactivation function at the top layer instead of the linear one that had been used before .... seems to achieve the same results - the error term never quite reaches the minimum needed to actually imitate the data like in the sparse network. 
+Tried adding a leaky relu activation function at the top layer instead of the linear one that had been used before .... seems to achieve the same results - the error term never quite reaches the minimum needed to actually imitate the data like in the sparse network. 
+
+## most recent model -- has not undergone full evaluation cycle
+Have vastly imporved the custimizability of the network allowing for quicker validation assessments. These paramaters below have not undergone full testing but seem to have some promise with evidence of less severe mode collapse via t-sne plots. 
+
+D,G,DM,AM=create_models(dropout_d=0.5,dropout_g=0.5,lr_d=0.0002,lr_g=0.0002,units_d1=2500,units_d2=400,activation_d='sigmoid', 
+                           losses=['binary_crossentropy','binary_crossentropy'],units_g=2000)]
+training(9000,60,0,2000) <- this is where I think there is a lot of promise ... by upping the batch size, this appears to be working a little bit better. Although of course it would be nece to have a generalizable model that can take very small batches, I think a higher batch number seems to be increasing the performance overall.  Also, important to note is the switch from MSE loss metrics to binary crossentropy. This is the recommended loss metric for many of the GAN papers I have read, and also appears to be working quite well. Have also tried to customize the learning rate.. making it smaller seems to help avoid local minima which was a problem with the initial parameters. 
+                           
