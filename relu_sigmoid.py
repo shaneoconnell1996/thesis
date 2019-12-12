@@ -5,7 +5,6 @@ import numpy as np
 import time
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten, Reshape
-from keras.layers import Conv2D, Conv2DTranspose, UpSampling2D
 from keras.layers import LeakyReLU, Dropout
 from keras.layers import BatchNormalization
 from keras.optimizers import Adam, RMSprop, SGD
@@ -19,20 +18,8 @@ import os
 import keras.backend as K
 from keras import regularizers
 from keras.models import model_from_json
+# performance metrics using Lin's Correlation Coefficient
 
-## this particular script will be using the clipping method of wasserstein
-## GANs... as opposed to KL divergence metrics
-
-#def wasserstein_loss(y_true, y_pred):
- #       return -K.mean(y_true * y_pred)
-
-# set up the discriminator model....
-def mean_confidence_interval(data, confidence=0.95): 
-    a = 1.0 * np.array(data) 
-    n = len(a) 
-    m, se = np.mean(a), scipy.stats.sem(a) 
-    h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1) 
-    return m, m-h, m+h, h 
 def concordance_correlation_coefficient(y_true, y_pred,
                        sample_weight=None,
                        multioutput='uniform_average'):
@@ -54,20 +41,20 @@ def concordance_correlation_coefficient(y_true, y_pred,
 
     return numerator/denominator
 
-
+# function for creating tsne plot
 def tsne_eval():
     scaler=MinMaxScaler()
-    ok=scaler.fit(x_train.values)
+    ok=scaler.fit(x_train.values) # just to ensure the stdout message from fitting does not go to log file 
     real_train=scaler.transform(x_train.values)
-    noise = np.random.uniform(0,real_train.max(),size=[166,100])
+    noise = np.random.uniform(0,real_train.max(),size=[166,100]) # uniform prior 
            # name="%d_iter.png" % i
-    f=G.predict(noise)
-    test=scaler.inverse_transform(f)
-    x=x_train.values
+    f=G.predict(noise) # G(z) predicted
+    test=scaler.inverse_transform(f) # inverse transform to get G(z) in workable terms
+    x=x_train.values # real values
 
     sne_stuff=np.concatenate((x,test))
     sne_stuff=pd.DataFrame(sne_stuff)
-    sne_stuff.shape
+    #sne_stuff.shape
     y=np.ones([2*166,1])
     y[166:]=0
     sne_stuff['y']=y
@@ -86,7 +73,7 @@ def tsne_eval():
                 alpha=1
             )
     print("CC:",concordance_correlation_coefficient(x,test))
-    
+    # same process for PCA Plot
 def pca_eval():
     scaler=MinMaxScaler()
     ok=scaler.fit(x_train.values)
@@ -123,37 +110,41 @@ def pca_eval():
                     data=pca_stuff,
                     legend="full",
                     alpha=1)
-        
+       # read in the actual data here 
 x_train = pd.read_csv('filtered_generator_data.csv', header=0, sep='\t', quotechar='"')
-# start small, as this is not optimized yet...
+# Create training function, that will allow for quick and easy hyperparameter changing 
 def training(train_steps,batch_size,training_ratio,save_interval):
     scaler=MinMaxScaler()
     train_steps=train_steps
     batch_size=batch_size
     #save_interval=500
+    
+    
     for i in range(train_steps):
             real_train = x_train.values[np.random.randint(0, \
 166,size=batch_size)] # take a random subset of the data
             ok=scaler.fit(real_train)
+            
             real_train=scaler.transform(real_train)
+            
             noise = np.random.uniform(0.0, real_train.max(), size=[batch_size, 100])
-            #noise = tf.convert_to_tensor(noise,dtype=tf.float32)
+            
+            
             fake_train = G.predict(noise)
-            #tf.Session().run(fake_train)
-            x = np.concatenate((real_train, fake_train))
-            y = np.ones([2*batch_size, 1])
-            y[batch_size:, :] = 0
-        #d_loss = DM.train_on_batch(x, y)
-#        if i % 10 == 0:
 
- #           for l in D.layers:
-  #                          weights = l.get_weights()
+            x = np.concatenate((real_train, fake_train))
+            
+            y = np.ones([2*batch_size, 1])
+            
+            y[batch_size:, :] = 0
+            
             if training_ratio > 0:
         
                 for j in range(training_ratio):
                     DM.train_on_batch(x,y)
             d_loss = DM.train_on_batch(x,y)
             y = np.ones([batch_size, 1])
+            # naive weight clipping implementeed here, but didnt work so is nothing fancy.... 
 #	for l in self.discriminator.layers:
   #                      weights = l.get_weights()
  #                       weights = [np.clip(w, -0.1, 0.1) for w in weights]
